@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" th:href="@{/css/pagination.css}">
+<link rel="stylesheet" th:href="@{/css/overview.css}">
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<link rel="stylesheet"
+	href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+	integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+	crossorigin="anonymous" />
+
+<link
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+	rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/slick.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/slick-theme.css}" />
+<script type="text/javascript" th:src="@{/js/slick.min.js}"></script>
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script
+	src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script type="text/javascript"
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+
+<link rel="apple-touch-icon" sizes="180x180"
+	th:href="@{/favicon_io/apple-touch-icon.png}">
+<link rel="icon" type="image/png" sizes="32x32"
+	th:href="@{/favicon_io/favicon-32x32.png}">
+<link rel="icon" type="image/png" sizes="16x16"
+	th:href="@{/favicon_io/favicon-16x16.png}">
+<link rel="manifest" th:href="@{/favicon_io/site.webmanifest}">
+</head>
+<body>
+	<!-- <div id="fb-root"></div>
+	<script async defer crossorigin="anonymous"
+		src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v6.0"></script> -->
+
+	<!-- header -->
+	<nav class="navbar navbar-expand-md bg-white navbar-light">
+		<div class="container">
+			<!-- logo  -->
+			<a class="navbar-brand" th:href="@{/danh-sach-san-pham}"
+				style="color: #CF111A;"><b>Book</b>XYZ</a>
+
+			<!-- navbar-toggler  -->
+			<button class="navbar-toggler d-lg-none" type="button"
+				data-toggle="collapse" data-target="#collapsibleNavId"
+				aria-controls="collapsibleNavId" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="collapsibleNavId">
+				<!-- form tìm kiếm  -->
+				<form class="form-inline ml-auto my-2 my-lg-0 mr-3"
+					th:action="@{/tim-kiem}" method="GET">
+					<div class="input-group" style="width: 520px;">
+						<input type="text" name="tensach" class="form-control"
+							aria-label="Small" placeholder="Nhập sách cần tìm kiếm..."
+							th:value="${tensach}">
+						<div>
+							<button class="btn ml-1"
+								style="background-color: #CF111A; color: white;" type="submit">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
+					</div>
+				</form>
+				<!-- ô đăng nhập đăng ký giỏ hàng trên header  -->
+				<ul class="navbar-nav mb-1 ml-auto align-items-center">
+					<div class="dropdown" th:if="${user} == null">
+						<li class="nav-item account btn dropdown" type="button"
+							data-toggle="dropdown"><a href="#"
+							class="btn btn-secondary rounded-circle"> <i
+								class="fa fa-user"></i>
+						</a> <a class="nav-link text-dark text-uppercase" href="#"
+							style="display: inline-block">Tài khoản</a></li>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item nutdangky text-center mb-2" href="#"
+								data-toggle="modal" data-target="#formdangky">Đăng ký</a> <a
+								class="dropdown-item nutdangnhap text-center" href="#"
+								data-toggle="modal" data-target="#formdangnhap">Đăng nhập</a>
+						</div>
+					</div>
+					<div class="dropdown" th:if="${user} != null">
+						<li class="nav-item account btn dropdown" type="button"
+							data-toggle="dropdown"><a href="#"
+							class="btn btn-secondary rounded-circle"> <i
+								class="fa fa-user"></i>
+						</a> <a class="nav-link text-dark text-uppercase" href="#"
+							style="display: inline-block">[[${user.hoTen}]]</a></li>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<form method="POST" th:action="@{/logout}">
+								<input type="submit"
+									class="btn btn-danger col-12 text-center mb-2"
+									data-toggle="modal" value="Đăng xuất">
+							</form>
+						</div>
+					</div>
+					<li class="nav-item giohang"><a th:href="@{/gio-hang}"
+						class="btn btn-secondary rounded-circle"> <i
+							class="fa fa-shopping-cart"></i>
+							<div class="cart-amount">[[${session.tongSoLuong}]]</div>
+					</a> <a class="nav-link text-dark giohang text-uppercase"
+						th:href="@{/gio-hang}" style="display: inline-block">Giỏ Hàng</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<!-- form dang ky khi click vao button tren header-->
+	<div class="modal fade mt-5" id="formdangky" data-backdrop="static"
+		tabindex="-1" aria-labelledby="dangky_tieude" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<ul class="tabs d-flex justify-content-around list-unstyled mb-0">
+						<li class="tab tab-dangnhap text-center"><a
+							class=" text-decoration-none">Đăng nhập</a>
+							<hr></li>
+						<li class="tab tab-dangky text-center"><a
+							class="text-decoration-none">Đăng ký</a>
+							<hr></li>
+					</ul>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+
+					<form id="form-signup" class="form-signin mt-2">
+						<div class="form-label-group">
+							<input type="text" class="form-control"
+								placeholder="Nhập họ và tên" name="name" required autofocus>
+						</div>
+						<div class="form-label-group">
+							<input type="text" class="form-control"
+								placeholder="Nhập số điện thoại" name="phone" required>
+						</div>
+						<div class="form-label-group">
+							<input type="email" class="form-control"
+								placeholder="Nhập địa chỉ email" name="email" required>
+						</div>
+						<div class="form-label-group">
+							<input type="password" class="form-control"
+								placeholder="Nhập mật khẩu" name="password" required>
+						</div>
+						<div class="form-label-group mb-4">
+							<input type="password" class="form-control"
+								name="confirm_password" placeholder="Nhập lại mật khẩu" required>
+						</div>
+						<button
+							class="btn btn-lg btn-block btn-signin text-uppercase text-white mt-3"
+							type="submit" style="background: #F5A623">Đăng ký</button>
+						<hr class="mt-3 mb-2">
+						<div class="custom-control custom-checkbox">
+							<p class="text-center">Bằng việc đăng ký, bạn đã đồng ý với
+								DealBook về</p>
+							<a href="#" class="text-decoration-none text-center"
+								style="color: #F5A623">Điều khoản dịch vụ & Chính sách bảo
+								mật</a>
+						</div>
+					</form>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- form dang nhap khi click vao button tren header-->
+	<div class="modal fade mt-5" id="formdangnhap" data-backdrop="static"
+		tabindex="-1" aria-labelledby="dangnhap_tieude" aria-hidden="true">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<ul class="tabs d-flex justify-content-around list-unstyled mb-0">
+						<li class="tab tab-dangnhap text-center"><a
+							class=" text-decoration-none">Đăng nhập</a>
+							<hr></li>
+						<li class="tab tab-dangky text-center"><a
+							class="text-decoration-none">Đăng ký</a>
+							<hr></li>
+					</ul>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+
+
+					<form id="form-signin" class="form-signin mt-2" method="post"
+						th:action="@{/dang-nhap}">
+						<div class="form-label-group">
+							<input type="text" class="form-control"
+								placeholder="Nhập tài khoản" name="username">
+						</div>
+
+						<div class="form-label-group">
+							<input type="password" class="form-control"
+								placeholder="Nhập mật khẩu" name="password">
+						</div>
+						<p th:if="${error} == 'error'">Tài khoản hoặc mật khẩu không
+							đúng</p>
+						<div class="custom-control custom-checkbox mb-3">
+							<input type="checkbox" class="custom-control-input"
+								id="customCheck1"> <label class="custom-control-label"
+								for="customCheck1">Nhớ mật khẩu</label> <a href="#"
+								class="float-right text-decoration-none" style="color: #F5A623">Quên
+								mật khẩu</a>
+						</div>
+
+						<button
+							class="btn btn-lg btn-block btn-signin text-uppercase text-white"
+							type="submit" style="background: #F5A623">Đăng nhập</button>
+						<!-- <hr class="my-4">
+						<button class="btn btn-lg btn-google btn-block text-uppercase"
+							type="submit">
+							<i class="fab fa-google mr-2"></i> Đăng nhập bằng Google
+						</button>
+						<button class="btn btn-lg btn-facebook btn-block text-uppercase"
+							type="submit">
+							<i class="fab fa-facebook-f mr-2"></i> Đăng nhập bằng Facebook
+						</button> -->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- thanh "danh muc sach" đã được ẩn bên trong + hotline + ho tro truc tuyen -->
+	<section class="duoinavbar">
+		<div class="container text-white">
+			<div class="row justify">
+				<div class="col-lg-3 col-md-5">
+					<div class="categoryheader">
+						<div class="noidungheader text-white">
+							<i class="fa fa-bars"></i> <span
+								class="text-uppercase font-weight-bold ml-1">Danh mục
+								sách</span>
+						</div>
+						<!-- CATEGORIES -->
+						<div class="categorycontent">
+							<ul>
+								<li th:each="nhommua : ${NhomMuas}"><a
+									th:href="'tim-kiem?nhommua=' + ${nhommua.tenNhom}">[[${nhommua.tenNhom}]]</a><i
+									class="fa fa-chevron-right float-right"></i>
+									<ul>
+										<li class="liheader"><a href="#"
+											class="header text-uppercase">[[${nhommua.tenNhom}]]</a></li>
+										<!-- Lọc thể loại theo nhóm mua -->
+										<div class="content trai">
+											<li th:each="theloai : ${theloais}"
+												th:if="${theloai.nhomMua.tenNhom} == ${nhommua.tenNhom}">
+												<a
+												th:href="'tim-kiem?nhommua=' + ${nhommua.tenNhom} + '&theloai=' + ${theloai.theLoai.tenTheLoai}">
+													[[${theloai.theLoai.tenTheLoai}]] </a>
+											</li>
+										</div>
+									</ul></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5 ml-auto contact d-none d-md-block">
+					<div class="benphai float-right">
+						<div class="hotline">
+							<i class="fa fa-phone"></i> <span>Hotline:<b>1900 1999</b>
+							</span>
+						</div>
+						<i class="fas fa-comments-dollar"></i> <a href="#">Hỗ trợ trực
+							tuyến </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- breadcrumb  -->
+	<section class="breadcrumbbar">
+		<div class="container">
+			<!-- <ol class="breadcrumb mb-0 p-0 bg-transparent">
+				<li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+				<li class="breadcrumb-item active"><a
+					href="sach-moi-tuyen-chon.html">Sách mới tuyển chọn</a></li>
+			</ol> -->
+		</div>
+	</section>
+	<section id="layoutSidenav_content" layout:fragment="content">
+		<p>This is a paragraph from the content page</p>
+	</section>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="client/common/templateClient">
+<head>
+	<meta charset="UTF-8">
+	<title>Danh sách sản phẩm</title>
+</head>
+
+<section layout:fragment="content">
+	<!-- ảnh banner -->
+	<section class="banner">
+		<div class="container">
+			<a href="sach-moi-tuyen-chon.html"><img
+				th:src="@{/images/sach-moi-full-banner.jpg}"
+				alt="sach-moi-full-banner" class="img-fluid"></a>
+		</div>
+	</section>
+
+	<!-- các sản phẩm  -->
+	<section class="content my-4">
+		<div class="container">
+			<div class="noidung bg-white" style="width: 100%;">
+				<div class="items">
+					<div class="row">
+						<div class="col-lg-3 col-md-4 col-xs-6 mb-3" th:each="book : ${books}">
+							<div class="card">
+								<a th:href="@{'/san-pham?masach='+${book.maSach}}" class="motsanpham"
+									style="text-decoration: none; color: black;"
+									data-toggle="tooltip" data-placement="bottom"
+									title="Lập Kế Hoạch Kinh Doanh Hiệu Quả"> <img
+									class="card-img-top anh"
+									th:src="@{'/download?image='+${book.getHinhAnh()}}"
+									th:alt="${book.tenSach}">
+									<div class="card-body noidungsp mt-3">
+										<h6 class="card-title ten">[[${book.tenSach}]]</h6>
+										<!-- <small class="tacgia text-muted">Brian Finch</small> -->
+										<div class="gia d-flex align-items-baseline">
+											<span class="giamoi">[[${book.donGiaS}]] VNĐ</span>
+											<!-- <div class="giacu text-muted">139.000 ₫</div> -->
+											<!-- <div class="sale">-20%</div> -->
+										</div>
+										<div class="danhgia">
+												<ul class="d-flex" style="list-style: none;">
+													<li class="active"><i class="fa fa-star"></i></li>
+													<li class="active"><i class="fa fa-star"></i></li>
+													<li class="active"><i class="fa fa-star"></i></li>
+													<li class="active"><i class="fa fa-star"></i></li>
+													<li><i class="fa fa-star"></i></li>
+													<!-- <span class="text-muted">0 nhận xét</span> -->
+												</ul>
+											</div>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- pagination bar  -->
+			<div class="pagination-bar my-3">
+				<div class="row text-center">
+					<div class="col-12">
+						<nav>
+							<ul class="pagination justify-content-center">
+								<th:block th:if="${totalPage <= 8}">
+									<a th:href="@{'/danh-sach-san-pham?currentPage='+${i}}"
+										th:each="i: ${#numbers.sequence(1, totalPage)}"
+										th:class="${currentPage == i ? 'active' : ''}"
+										class="page-link">[[${i}]]</a>
+								</th:block>
+								<th:block th:if="${totalPage > 8}">
+									<a th:href="@{'/danh-sach-san-pham?currentPage=1'}"
+										th:class="${currentPage == 1 ? 'disbale' : ''}">&laquo;</a>
+									<th:block
+										th:if="${currentPage <= 4 || currentPage > totalPage - 3}">
+										<a th:href="@{'/danh-sach-san-pham?currentPage='+${i}}"
+											th:each="i: ${#numbers.sequence(1, 5)}"
+											th:class="${currentPage == i ? 'active' : ''}">[[${i}]]</a>
+										<a th:href="@{'/danh-sach-san-pham?currentPage=5'}">...</a>
+										<a th:href="@{'danh-sach-san-pham?currentPage='+${i}"
+											th:each="i: ${#numbers.sequence(totalPage - 3, totalPage)}"
+											th:class="${currentPage == i ? 'active' : ''}">[[${i}]]</a>
+									</th:block>
+									<a th:href="@{'/danh-sach-san-pham?currentPage='+${totalPage}}"
+										th:class="${currentPage == totalPage ? 'disbale' : ''}">&raquo;</a>
+								</th:block>
+
+								<th:block
+									th:if="${currentPage > 4 && currentPage < totalPage - 3}">
+									<a
+										th:href="@{'/danh-sach-san-pham?currentPage='+${currentPage - 4}}">...</a>
+
+									<a th:href="@{'/danh-sach-san-pham?currentPage='+${i}}"
+										th:each="i: ${#numbers.sequence(currentPage - 3, currentPage + 3)}"
+										th:class="${currentPage == i ? 'active' : ''}">[[${i}]]</a>
+									<a
+										th:href="@{'/danh-sach-san-pham?currentPage='+${currentPage + 4}}">...</a>
+								</th:block>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+
+			<!--het khoi san pham-->
+		</div>
+		<!--het div noidung-->
+		</div>
+		<!--het container-->
+	</section>
+
+	<div th:replace="client/common/footer :: footer"></div>
+</section>
+</body>
+</html>
