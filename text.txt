@@ -1,0 +1,5 @@
+com .store.entity map dữ liệu từ db tạo thành class tương ứng trên java
+qua lớp com.store.repon để lớp đấy kế thừa jpa-reponstory chứa query lấy data từ db 
+xử lyws qua lớp com.store.service , khai báo interface, 
+xử lý chuyển entity sang lớp model-là lớp DTO xử lý trên giao diện người dùng 
+đổ vào controller 
