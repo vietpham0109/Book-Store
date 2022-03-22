@@ -1,2 +1,2 @@
-# Book-Shop-E-Commerce
+# Book-Store
 book sales website manager
